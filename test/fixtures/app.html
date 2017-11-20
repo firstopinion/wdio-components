@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test - App</title>
+  </head>
+
+  <body>
+    <div id="app" class="multiple classnames">
+      <div id="content">
+        <h1>Test</h1>
+        <p class="paragraph paragraph1" data-test="val1">Paragraph1</p>
+        <p class="paragraph paragraph2" data-test="val2">Paragraph2</p>
+        <form id="form">
+          <input name="enabled" id="enabled" type="text"></input>
+          <input name="disabled" id="disabled" type="text" disabled></input>
+          <input name="byName" type="text"></input>
+          <select name="select">
+            <option id="selected-option" selected>Default</option>
+            <option id="unselected-option">Value</option>
+          </select>
+          <input type="checkbox" id="uncheckedbox" name="uncheckedbox">
+          <input type="checkbox" id="checkbox" name="checkbox">
+          <input type="checkbox" id="checkboxes-1" name="checkboxes" value='1'>
+          <input type="checkbox" id="checkboxes-2" name="checkboxes" value='2'>
+          <input type="radio" id="radio" name="radio" value="0">
+          <input type="radio" id="radios-1" name="radios" value="1">
+          <input type="radio" id="radios-2" name="radios" value="2">
+        </form>
+        <div id="visible">Visible</div>
+        <div id="hidden" style="visibility: hidden">Hidden</div>
+        <iframe></iframe>
+        <ul id="list">
+          <li>First</li>
+          <li>Second</li>
+          <li><ul><li>Nested</li></ul></li>
+          <li>Last</li>
+        </ul>
+        <div id="scrollable-outer" style="height: 300px; width: 300px; overflow: auto;">
+          <div id="scrollable-inner" style="height: 700px; width: 700px;"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
