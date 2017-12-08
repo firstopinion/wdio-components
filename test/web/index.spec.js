@@ -9,7 +9,7 @@
 const assert = require('chai').assert
 
 // lib
-const components = require('../lib/index')
+const components = require('../../lib/web/index')
 
 /* -----------------------------------------------------------------------------
  * test
@@ -17,6 +17,14 @@ const components = require('../lib/index')
 
 describe('components', function () {
   it('Should expose all components', function () {
-    assert.hasAllKeys(components, ['Component', 'Field', 'Form', 'List'])
+    assert.hasAllKeys(components, [
+      'Checkbox',
+      'Component',
+      'Field',
+      'Form',
+      'List',
+      'Radio',
+      'Select'
+    ])
   })
 })

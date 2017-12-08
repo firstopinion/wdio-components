@@ -12,6 +12,10 @@
   "bugs": {
     "url": "https://github.com/firstopinion/wdio-components/issues"
   },
+  "standard": {
+    "envs": ["mocha"],
+    "globals": ["driver", "browser"]
+  },
   "scripts": {
     "test": "standard ./lib && wdio",
     "inspect-test": "inspect npm test",

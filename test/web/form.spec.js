@@ -12,13 +12,13 @@ const path = require('path')
 const assert = require('chai').assert
 
 // lib
-const Form = require('../lib/form')
+const Form = require('../../lib/web/form')
 
 /* -----------------------------------------------------------------------------
  * reusable
  * -------------------------------------------------------------------------- */
 
-const appPath = path.join(__dirname, 'fixtures', 'app.html')
+const appPath = path.join(__dirname, '..', 'fixtures', 'app.html')
 const appUrl = `file://${appPath}`
 
 /* -----------------------------------------------------------------------------

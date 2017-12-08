@@ -13,8 +13,8 @@ const path = require('path')
 const assert = require('chai').assert
 
 // lib
-const Component = require('../lib/component')
-const retry = require('../lib/utils/retry')
+const BaseComponent = require('../lib/component')
+const BaseComponentResolver = require('../lib/support/component-resolver')
 
 /* -----------------------------------------------------------------------------
  * reusable
@@ -22,6 +22,26 @@ const retry = require('../lib/utils/retry')
 
 const appPath = path.join(__dirname, 'fixtures', 'app.html')
 const appUrl = `file://${appPath}`
+
+// We will use the web resolver and web fixtures in order to test some of the
+// agnostic behavior. This feels a little strange but we need some sort of
+// interface to interact with (or heavy mocks/stubs).
+
+class ComponentResolver extends BaseComponentResolver {
+  static get defaultComponents () {
+    return []
+  }
+
+  resolve () {
+    return Component
+  }
+}
+
+class Component extends BaseComponent {
+  static get ComponentResolver () {
+    return ComponentResolver
+  }
+}
 
 /* -----------------------------------------------------------------------------
  * test
@@ -73,13 +93,6 @@ describe('Component', function () {
       assert.equal(component.getTagName(), 'h1')
     })
 
-    it('Should find by string @name selector', function () {
-      const component = this.body.$('@name.byName')
-
-      assert.instanceOf(component, Component)
-      assert.equal(component.getTagName(), 'input')
-    })
-
     it('Should find by definition', function () {
       const component = this.body.$({ selector: 'h1' })
 
@@ -116,11 +129,6 @@ describe('Component', function () {
       assert.equal(components.length, 2)
       assert.instanceOf(components[0], Component)
       assert.instanceOf(components[1], Component)
-    })
-
-    it('Should get closest', function () {
-      const component = this.body.$('#app', 'h1')
-      assert.equal(component.closest('div').getAttribute('id'), 'content')
     })
 
     it('Should get first', function () {
@@ -215,98 +223,6 @@ describe('Component', function () {
   })
 
   /* ---------------------------------------------------------------------------
-   * focus actions
-   * ------------------------------------------------------------------------ */
-
-  describe('focus actions', function () {
-    beforeEach(function () {
-      this.body = Component.create('body')
-      this.input = this.body.$('#enabled')
-    })
-
-    it('Should focus on element', function () {
-      this.input.focus()
-      assert.equal(this.body.$(':focus').getAttribute('id'), 'enabled')
-    })
-
-    it('Should blur element', function () {
-      this.input.focus()
-      this.input.blur()
-
-      assert.isFalse(this.body.exists(':focus'))
-    })
-
-    it('Should blur currently active element', function () {
-      this.input.focus()
-      this.body.blurActive()
-
-      assert.isFalse(this.body.exists(':focus'))
-    })
-  })
-
-  /* ---------------------------------------------------------------------------
-   * scroll actions
-   * ------------------------------------------------------------------------ */
-
-  describe('scroll actions', function () {
-    beforeEach(function () {
-      this.outer = Component.create('#scrollable-outer')
-      this.inner = Component.create('#scrollable-inner')
-    })
-
-    it('Should scroll x by delta.', function () {
-      this.outer.scrollXBy(50)
-      this.outer.scrollXBy(50)
-
-      const pos = this.outer.getScrollPos()
-      assert.equal(pos.scrollLeft, 100)
-      assert.equal(pos.scrollTop, 0)
-    })
-
-    it('Should scroll y by delta.', function () {
-      this.outer.scrollYBy(50)
-      this.outer.scrollYBy(50)
-
-      const pos = this.outer.getScrollPos()
-      assert.equal(pos.scrollLeft, 0)
-      assert.equal(pos.scrollTop, 100)
-    })
-
-    it('Should scroll x to pos.', function () {
-      this.outer.scrollXTo(50)
-      this.outer.scrollXTo(50)
-
-      const pos = this.outer.getScrollPos()
-      assert.equal(pos.scrollLeft, 50)
-      assert.equal(pos.scrollTop, 0)
-    })
-
-    it('Should scroll y to pos.', function () {
-      this.outer.scrollYTo(50)
-      this.outer.scrollYTo(50)
-
-      const pos = this.outer.getScrollPos()
-      assert.equal(pos.scrollLeft, 0)
-      assert.equal(pos.scrollTop, 50)
-    })
-
-    it('Should scroll to bottom.', function () {
-      this.outer.scrollToBottom()
-
-      assert.isTrue(this.outer.isScrolledToBottom())
-      assert.isFalse(this.outer.isScrolledToTop())
-    })
-
-    it('Should scroll to top.', function () {
-      this.outer.scrollToBottom()
-      this.outer.scrollToTop()
-
-      assert.isFalse(this.outer.isScrolledToBottom())
-      assert.isTrue(this.outer.isScrolledToTop())
-    })
-  })
-
-  /* ---------------------------------------------------------------------------
    * checks
    * ------------------------------------------------------------------------ */
 
@@ -318,14 +234,6 @@ describe('Component', function () {
     it('Should return if element exists or not', function () {
       assert.isTrue(this.body.exists('#app'))
       assert.isFalse(this.body.exists('.i-do-not-exist'))
-    })
-
-    it('Should return if the element has a specified class.', function () {
-      const app = Component.create('#app')
-
-      assert.isTrue(app.hasClass('multiple'))
-      assert.isTrue(app.hasClass('classnames'))
-      assert.isFalse(app.hasClass('fail'))
     })
   })
 
