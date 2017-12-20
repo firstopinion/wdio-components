@@ -2,7 +2,7 @@
   "name": "wdio-components",
   "description": "Components for webdriverIO",
   "author": "Jarid Margolin <jarid@firstopinionapp.com>",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/firstopinion/wdio-components",
   "license": "MIT",
   "repository": {
